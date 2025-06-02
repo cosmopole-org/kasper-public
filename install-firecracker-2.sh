@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rootfs_path=/app/ubuntu-22.04.ext4
+
 # Mount and install Ubuntu
 mkdir -p /mnt/rootfs
 mount -o loop $rootfs_path /mnt/rootfs
