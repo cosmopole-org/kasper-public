@@ -40,7 +40,8 @@ chmod +x kernel/vmlinux
 echo step9
 
 # Create rootfs (100MB)
-rootfs_path="rootfs/rootfs.ext4"
+rootfs_path=/app/ubuntu-22.04.ext4
+wget https://s3.amazonaws.com/spec.ccfc.min/firecracker-ci/v1.9/${ARCH}/ubuntu-22.04.ext4
 dd if=/dev/zero of=$rootfs_path bs=1M count=100
 mkfs.ext4 $rootfs_path
 
