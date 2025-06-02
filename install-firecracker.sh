@@ -45,10 +45,10 @@ dd if=/dev/zero of=$rootfs_path bs=1M count=100
 mkfs.ext4 $rootfs_path
 
 # Mount and install Ubuntu
-mkdir -p /mnt/rootfs
-mount -o loop $rootfs_path /mnt/rootfs
-debootstrap --arch=amd64 focal /mnt/rootfs
-umount /mnt/rootfs
+mkdir -p /app/mnt/rootfs
+mount -o loop $rootfs_path /app/mnt/rootfs
+debootstrap --arch=amd64 focal /app/mnt/rootfs
+umount /app/mnt/rootfs
 
 # Set up networking
 ip link add name br0 type bridge
