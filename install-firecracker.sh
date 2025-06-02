@@ -41,15 +41,15 @@ echo step9
 
 # Create rootfs (100MB)
 rootfs_path=/app/ubuntu-22.04.ext4
-wget https://s3.amazonaws.com/spec.ccfc.min/firecracker-ci/v1.9/${ARCH}/ubuntu-22.04.ext4
+wget https://s3.amazonaws.com/spec.ccfc.min/firecracker-ci/v1.9/${arch}/ubuntu-22.04.ext4
 dd if=/dev/zero of=$rootfs_path bs=1M count=100
 mkfs.ext4 $rootfs_path
 
 # Mount and install Ubuntu
-mkdir -p /app/mnt/rootfs
-mount -o loop $rootfs_path /app/mnt/rootfs
-debootstrap --arch=amd64 focal /app/mnt/rootfs
-umount /app/mnt/rootfs
+sudo mkdir -p /mnt/rootfs
+mount -o loop $rootfs_path /mnt/rootfs
+debootstrap --arch=amd64 focal /mnt/rootfs
+umount /mnt/rootfs
 
 # Set up networking
 ip link add name br0 type bridge
