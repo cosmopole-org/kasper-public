@@ -7,6 +7,10 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+latest=$(wget "http://spec.ccfc.min.s3.amazonaws.com/?prefix=firecracker-ci/v1.9/aarch64/vmlinux-5.10&list-type=2" -O - 2>/dev/null | grep "(?<=<Key>)(firecracker-ci/v1.9/aarch64/vmlinux-5\.10\.[0-9]{3})(?=</Key>)" -o -P)
+kernel_url=https://s3.amazonaws.com/spec.ccfc.min/${latest}
+echo ${kernel_url}
+
 # Install dependencies
 apt-get update
 apt-get install -y make git gcc bridge-utils net-tools libelf-dev pkg-config \
@@ -26,8 +30,8 @@ mkdir -p /opt/firecracker/{vms,kernel,rootfs,snapshots}
 cd /opt/firecracker
 
 # Download kernel
-kernel_version="v5.10"
-kernel_url="https://s3.amazonaws.com/spec.ccfc.min/img/quickstart_guide/${arch}/kernels/vmlinux-${kernel_version}"
+latest=$(wget "http://spec.ccfc.min.s3.amazonaws.com/?prefix=firecracker-ci/v1.9/aarch64/vmlinux-5.10&list-type=2" -O - 2>/dev/null | grep "(?<=<Key>)(firecracker-ci/v1.9/aarch64/vmlinux-5\.10\.[0-9]{3})(?=</Key>)" -o -P)
+kernel_url=https://s3.amazonaws.com/spec.ccfc.min/${latest}
 curl -fsSL -o kernel/vmlinux $kernel_url
 chmod +x kernel/vmlinux
 
