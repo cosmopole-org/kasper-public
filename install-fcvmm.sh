@@ -46,6 +46,7 @@ dd if=/dev/zero of=$rootfs_path bs=1M count=100
 mkfs.ext4 $rootfs_path
 
 # Mount and install Ubuntu
+rootfs_path=/app/ubuntu-22.04.ext4
 mkdir -p /mnt/rootfs
 mount -o loop $rootfs_path /mnt/rootfs
 debootstrap --arch=amd64 focal /mnt/rootfs
