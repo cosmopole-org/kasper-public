@@ -19,6 +19,9 @@ cp -a rootfs/* /mnt/tmpfs
 umount /mnt/tmpfs
 echo -e '#!/bin/sh\necho "Hello from init"\nexec /bin/sh' | tee rootfs/root/init
 chmod +x rootfs/root/init
+mount -o loop rootfs.ext4 /mnt/tmpfs
+cp rootfs/root/init /mnt/tmpfs/root/init
+umount /mnt/tmpfs
 mv /tmp/alpine-rootfs/rootfs.ext4 /opt/firecracker/rootfs/rootfs.ext4
 chmod 644 /opt/firecracker/rootfs/rootfs.ext4
 
