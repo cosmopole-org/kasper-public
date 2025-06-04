@@ -2,11 +2,25 @@
 
 cd /opt/firecracker
 
+rm /opt/firecracker/rootfs/rootfs.ext4
 # Mount and install Ubuntu
-mkdir -p /mnt/rootfs
-mount -o loop rootfs/rootfs.ext4 /mnt/rootfs
-debootstrap --arch=amd64 focal /mnt/rootfs
-umount /mnt/rootfs
+mkdir -p /tmp/alpine-rootfs
+cd /tmp/alpine-rootfs
+# Download Alpine minirootfs
+wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-minirootfs-3.18.4-x86_64.tar.gz
+# Extract it
+mkdir rootfs
+tar -xf alpine-minirootfs-*.tar.gz -C rootfs
+dd if=/dev/zero of=rootfs.ext4 bs=1M count=64
+mkfs.ext4 rootfs.ext4
+mkdir /mnt/tmpfs
+mount -o loop rootfs.ext4 /mnt/tmpfs
+cp -a rootfs/* /mnt/tmpfs
+umount /mnt/tmpfs
+echo -e '#!/bin/sh\necho "Hello from init"\nexec /bin/sh' | tee rootfs/root/init
+chmod +x rootfs/root/init
+mv /tmp/alpine-rootfs/rootfs.ext4 /opt/firecracker/rootfs/rootfs.ext4
+chmod 644 /opt/firecracker/rootfs/rootfs.ext4
 
 # Set up networking
 ip link add name br0 type bridge
