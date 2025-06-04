@@ -1,10 +1,10 @@
 #!/bin/bash
 
-rootfs_path=/app/ubuntu-22.04.ext4
+cd /opt/firecracker
 
 # Mount and install Ubuntu
 mkdir -p /mnt/rootfs
-mount -o loop $rootfs_path /mnt/rootfs
+mount -o loop rootfs/rootfs.ext4 /mnt/rootfs
 debootstrap --arch=amd64 focal /mnt/rootfs
 umount /mnt/rootfs
 

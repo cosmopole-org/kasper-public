@@ -31,16 +31,14 @@ cd /opt/firecracker
 echo step6
 
 # Download kernel
-latest=$(wget "http://spec.ccfc.min.s3.amazonaws.com/?prefix=firecracker-ci/v1.9/aarch64/vmlinux-5.10&list-type=2" -O - 2>/dev/null | grep "(?<=<Key>)(firecracker-ci/v1.9/aarch64/vmlinux-5\.10\.[0-9]{3})(?=</Key>)" -o -P)
 echo step7
-kernel_url=https://s3.amazonaws.com/spec.ccfc.min/${latest}
+kernel_url=https://s3.amazonaws.com/spec.ccfc.min/img/hello/kernel/hello-vmlinux.bin
 curl -fsSL -o kernel/vmlinux $kernel_url
 echo step8
 chmod +x kernel/vmlinux
 echo step9
 
 # Create rootfs (100MB)
-rootfs_path=/app/ubuntu-22.04.ext4
-wget https://s3.amazonaws.com/spec.ccfc.min/firecracker-ci/v1.9/${arch}/ubuntu-22.04.ext4
-dd if=/dev/zero of=$rootfs_path bs=1M count=100
-mkfs.ext4 $rootfs_path
+curl -fsSL -o rootfs/rootfs.ext4 https://s3.amazonaws.com/spec.ccfc.min/img/hello/fsfiles/hello-rootfs.ext4
+dd if=/dev/zero of=rootfs/rootfs.ext4 bs=1M count=100
+mkfs.ext4 rootfs/rootfs.ext4
