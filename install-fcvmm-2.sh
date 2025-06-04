@@ -1,6 +1,19 @@
 #!/bin/bash
 
-cd /opt/firecracker
+cd /opt/firecracker/rootfs
+# Download Alpine minirootfs (x86_64)
+wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-3.19.1-x86_64.tar.gz
+# Create a 64MB image file
+dd if=/dev/zero of=rootfs.ext4 bs=1M count=64
+# Format as ext4
+mkfs.ext4 rootfs.ext4
+mkdir -p /mnt/alpine-root
+mount -o loop rootfs.ext4 /mnt/alpine-root
+# Extract Alpine rootfs into it
+tar -xzf alpine-minirootfs-3.19.1-x86_64.tar.gz -C /mnt/alpine-root
+bash -c 'echo -e "#!/bin/sh\necho \"🔥 Init working\"\nexec /bin/sh" > /mnt/alpine-root/init'
+sudo chmod +x /mnt/alpine-root/init
+umount /mnt/alpine-root
 
 rm /opt/firecracker/rootfs/rootfs.ext4
 # Mount and install Ubuntu
