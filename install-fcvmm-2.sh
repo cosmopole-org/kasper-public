@@ -2,7 +2,7 @@
 
 cd /opt/firecracker/rootfs
 # Download Alpine minirootfs (x86_64)
-wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-3.19.1-x86_64.tar.gz
+wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-minirootfs-3.18.4-x86_64.tar.gz
 # Create a 64MB image file
 dd if=/dev/zero of=rootfs.ext4 bs=1M count=64
 # Format as ext4
