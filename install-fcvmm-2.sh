@@ -8,12 +8,15 @@ dd if=/dev/zero of=rootfs.ext4 bs=1M count=64
 # Format as ext4
 mkfs.ext4 rootfs.ext4
 mkdir -p /mnt/alpine-root
-mount -o loop rootfs.ext4 /mnt/alpine-root
+sudo mount -o loop rootfs.ext4 /mnt/alpine-root
 # Extract Alpine rootfs into it
 tar -xzf alpine-minirootfs-3.18.4-x86_64.tar.gz -C /mnt/alpine-root
-bash -c 'echo -e "#!/bin/sh\necho \"🔥 Init working\"\nexec /bin/sh" > /mnt/alpine-root/init'
-chmod +x /mnt/alpine-root/init
-umount /mnt/alpine-root
+tee /mnt/alpine-root/init > /dev/null << 'EOF'
+#!/bin/sh
+exec /bin/sh
+EOF
+sudo chmod +x /mnt/alpine-root/init
+sudo umount /mnt/alpine-root
 
 cd /opt/firecracker
 
